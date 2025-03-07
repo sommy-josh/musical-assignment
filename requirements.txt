@@ -1,0 +1,8 @@
+djangorestframework
+factory_boy
+locust
+pyJWT
+python-decouple
+pytest
+pytest-benchmark
+pytest-django
