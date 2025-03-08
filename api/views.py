@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 import jwt
@@ -30,7 +30,7 @@ def generate_access_token(user):
     payload = {
         'user_id': user.id,
         'email': user.email,
-        'exp': datetime.utcnow() + ACCESS_TOKEN_EXPIRATION,
+        'exp': datetime.now(timezone.utc) + ACCESS_TOKEN_EXPIRATION,  # Fixed
         'type': 'access'
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
@@ -38,7 +38,7 @@ def generate_access_token(user):
 def generate_refresh_token(user):
     payload = {
         'user_id': user.id,
-        'exp': datetime.utcnow() + REFRESH_TOKEN_EXPIRATION,
+        'exp': datetime.now(timezone.utc) + REFRESH_TOKEN_EXPIRATION,
         'type': 'refresh'
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
