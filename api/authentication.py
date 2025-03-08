@@ -3,7 +3,7 @@
 import jwt
 from django.conf import settings
 from rest_framework import authentication, exceptions
-from .models import AdminUser
+from .models import User
 
 class JWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
@@ -20,8 +20,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('Invalid token')
 
         try:
-            user = AdminUser.objects.get(id=payload['user_id'])
-        except AdminUser.DoesNotExist:
+            user = User.objects.get(id=payload['user_id'])
+        except User.DoesNotExist:
             raise exceptions.AuthenticationFailed('User not found')
 
         return (user, token)
