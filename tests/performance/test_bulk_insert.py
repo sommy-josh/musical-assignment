@@ -7,5 +7,4 @@ def test_bulk_insert_artists(benchmark):
     
     def insert_artists():
         ArtistFactory.create_batch(10000)  # Insert 10,000 artists
-
     benchmark(insert_artists)  # Measure execution time

@@ -1,3 +1,4 @@
+import datetime
 import factory
 from django.contrib.auth import get_user_model
 from api.models import Genre, Artist, Album, Track
@@ -7,15 +8,18 @@ User = get_user_model()
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True  # ✅ Fixes the warning
 
-    email = factory.Faker("email")
+    email = factory.Sequence(lambda n: f"user{n}@example.com")  # ✅ Ensure unique emails
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
     password = factory.PostGenerationMethodCall("set_password", "testpassword")
 
 class GenreFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Genre
 
-    name = factory.Faker("word")
+    name = factory.Sequence(lambda n: f"Genre {n}")  # Ensures uniqueness
 
 class ArtistFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -38,6 +42,6 @@ class TrackFactory(factory.django.DjangoModelFactory):
         model = Track
 
     title = factory.Faker("sentence", nb_words=2)
-    duration = "00:03:30"
+    duration = datetime.timedelta(minutes=3, seconds=30)  # ✅ Fixed
     file_url = "http://example.com/song.mp3"
     album = factory.SubFactory(AlbumFactory)
